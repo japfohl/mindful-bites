@@ -18,7 +18,8 @@ struct TagPicker: View {
                     Label("Add your first tag", systemImage: "plus.circle")
                         .font(.subheadline)
                 }
-            } else {
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else if !allTags.isEmpty {
                 FlowLayout(spacing: 8) {
                     ForEach(allTags) { tag in
                         TagChip(
@@ -29,12 +30,14 @@ struct TagPicker: View {
                         )
                     }
 
-                    Button {
-                        isAddingTag = true
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title3)
-                            .foregroundColor(.accentColor)
+                    if !isAddingTag {
+                        Button {
+                            isAddingTag = true
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title3)
+                                .foregroundColor(.accentColor)
+                        }
                     }
                 }
             }

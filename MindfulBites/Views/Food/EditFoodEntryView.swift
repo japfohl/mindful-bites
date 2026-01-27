@@ -116,6 +116,7 @@ struct EditFoodEntryView: View {
                         .scaledToFill()
                         .frame(height: 200)
                         .frame(maxWidth: .infinity)
+                        .clipped()
                         .clipShape(RoundedRectangle(cornerRadius: 12))
 
                     Button {
