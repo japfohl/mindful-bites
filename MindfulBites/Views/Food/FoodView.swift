@@ -31,7 +31,9 @@ struct FoodView: View {
                         selectedEntry = entry
                     }
                 case .gallery:
-                    FoodGalleryPlaceholderView()
+                    FoodGalleryView(entries: entries) { entry in
+                        selectedEntry = entry
+                    }
                 }
             }
             .navigationTitle("Food")
@@ -51,17 +53,6 @@ struct FoodView: View {
                 FoodEntryDetailView(entry: entry)
             }
         }
-    }
-}
-
-/// Placeholder for gallery view - will be implemented in Phase 3
-struct FoodGalleryPlaceholderView: View {
-    var body: some View {
-        ContentUnavailableView(
-            "Gallery Coming Soon",
-            systemImage: "square.grid.2x2",
-            description: Text("Gallery view will be available in the next update")
-        )
     }
 }
 

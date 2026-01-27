@@ -28,6 +28,11 @@
 		AA0000010000000000000019 /* FoodTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000019 /* FoodTimelineView.swift */; };
 		AA0000010000000000000020 /* FoodEntryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000020 /* FoodEntryDetailView.swift */; };
 		AA0000010000000000000021 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000021 /* Date+Extensions.swift */; };
+		AA0000010000000000000022 /* TagPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000022 /* TagPicker.swift */; };
+		AA0000010000000000000023 /* ThumbnailCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000023 /* ThumbnailCache.swift */; };
+		AA0000010000000000000024 /* GalleryGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000024 /* GalleryGridItem.swift */; };
+		AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000025 /* GalleryFilterSheet.swift */; };
+		AA0000010000000000000026 /* FoodGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000026 /* FoodGalleryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +57,11 @@
 		AA0000020000000000000019 /* FoodTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTimelineView.swift; sourceTree = "<group>"; };
 		AA0000020000000000000020 /* FoodEntryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodEntryDetailView.swift; sourceTree = "<group>"; };
 		AA0000020000000000000021 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		AA0000020000000000000022 /* TagPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagPicker.swift; sourceTree = "<group>"; };
+		AA0000020000000000000023 /* ThumbnailCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailCache.swift; sourceTree = "<group>"; };
+		AA0000020000000000000024 /* GalleryGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridItem.swift; sourceTree = "<group>"; };
+		AA0000020000000000000025 /* GalleryFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryFilterSheet.swift; sourceTree = "<group>"; };
+		AA0000020000000000000026 /* FoodGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodGalleryView.swift; sourceTree = "<group>"; };
 		AA0000030000000000000001 /* MindfulBites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindfulBites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -130,6 +140,9 @@
 				AA0000020000000000000018 /* FoodEntryRow.swift */,
 				AA0000020000000000000019 /* FoodTimelineView.swift */,
 				AA0000020000000000000020 /* FoodEntryDetailView.swift */,
+				AA0000020000000000000024 /* GalleryGridItem.swift */,
+				AA0000020000000000000025 /* GalleryFilterSheet.swift */,
+				AA0000020000000000000026 /* FoodGalleryView.swift */,
 			);
 			path = Food;
 			sourceTree = "<group>";
@@ -161,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0000020000000000000014 /* PhotoStorageService.swift */,
+				AA0000020000000000000023 /* ThumbnailCache.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -186,6 +200,7 @@
 			children = (
 				AA0000020000000000000015 /* CameraPicker.swift */,
 				AA0000020000000000000016 /* MealTypePicker.swift */,
+				AA0000020000000000000022 /* TagPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -279,6 +294,11 @@
 				AA0000010000000000000019 /* FoodTimelineView.swift in Sources */,
 				AA0000010000000000000020 /* FoodEntryDetailView.swift in Sources */,
 				AA0000010000000000000021 /* Date+Extensions.swift in Sources */,
+				AA0000010000000000000022 /* TagPicker.swift in Sources */,
+				AA0000010000000000000023 /* ThumbnailCache.swift in Sources */,
+				AA0000010000000000000024 /* GalleryGridItem.swift in Sources */,
+				AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */,
+				AA0000010000000000000026 /* FoodGalleryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

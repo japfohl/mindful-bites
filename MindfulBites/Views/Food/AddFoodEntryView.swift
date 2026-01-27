@@ -9,6 +9,7 @@ struct AddFoodEntryView: View {
     @State private var selectedImage: UIImage?
     @State private var text: String = ""
     @State private var mealType: MealType?
+    @State private var selectedTags: [Tag] = []
 
     @State private var showingCamera = false
     @State private var showingPhotoPicker = false
@@ -25,6 +26,7 @@ struct AddFoodEntryView: View {
                     photoSection
                     textSection
                     mealTypeSection
+                    tagsSection
                 }
                 .padding()
             }
@@ -145,6 +147,17 @@ struct AddFoodEntryView: View {
         }
     }
 
+    // MARK: - Tags Section
+
+    private var tagsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Tags")
+                .font(.headline)
+
+            TagPicker(selectedTags: $selectedTags)
+        }
+    }
+
     // MARK: - Save
 
     private func saveEntry() {
@@ -159,7 +172,8 @@ struct AddFoodEntryView: View {
         let entry = FoodEntry(
             text: trimmedText.isEmpty ? nil : trimmedText,
             photoFileName: photoFilename,
-            mealType: mealType
+            mealType: mealType,
+            tags: selectedTags
         )
 
         modelContext.insert(entry)
