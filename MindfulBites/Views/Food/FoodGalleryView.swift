@@ -5,61 +5,22 @@ struct FoodGalleryView: View {
     let entries: [FoodEntry]
     let onEntryTap: (FoodEntry) -> Void
 
-    @State private var filter = GalleryFilter()
-    @State private var showingFilter = false
-
     private let columns = [
         GridItem(.flexible(), spacing: 4),
         GridItem(.flexible(), spacing: 4),
         GridItem(.flexible(), spacing: 4)
     ]
 
+    /// Only show entries that have photos in the gallery
     private var photoEntries: [FoodEntry] {
         entries.filter { $0.hasPhoto }
     }
 
-    private var filteredEntries: [FoodEntry] {
-        var result = photoEntries
-
-        // Filter by date range
-        if let startDate = filter.startDate {
-            result = result.filter { $0.createdAt >= startDate }
-        }
-        if let endDate = filter.endDate {
-            result = result.filter { $0.createdAt < endDate }
-        }
-
-        // Filter by tags
-        if !filter.selectedTagIDs.isEmpty {
-            result = result.filter { entry in
-                entry.tags.contains { filter.selectedTagIDs.contains($0.id) }
-            }
-        }
-
-        return result
-    }
-
     var body: some View {
-        Group {
-            if photoEntries.isEmpty {
-                emptyState
-            } else if filteredEntries.isEmpty {
-                noResultsState
-            } else {
-                galleryGrid
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingFilter = true
-                } label: {
-                    Image(systemName: filter.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
-                }
-            }
-        }
-        .sheet(isPresented: $showingFilter) {
-            GalleryFilterSheet(filter: $filter)
+        if photoEntries.isEmpty {
+            emptyState
+        } else {
+            galleryGrid
         }
     }
 
@@ -69,7 +30,7 @@ struct FoodGalleryView: View {
 
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 4) {
-                    ForEach(filteredEntries) { entry in
+                    ForEach(photoEntries) { entry in
                         Button {
                             onEntryTap(entry)
                         } label: {
@@ -85,23 +46,10 @@ struct FoodGalleryView: View {
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "No Photos Yet",
+            "No Photos",
             systemImage: "photo.on.rectangle",
-            description: Text("Add photos to your food entries to see them here")
+            description: Text("Entries with photos will appear here")
         )
-    }
-
-    private var noResultsState: some View {
-        ContentUnavailableView {
-            Label("No Matching Photos", systemImage: "magnifyingglass")
-        } description: {
-            Text("Try adjusting your filters")
-        } actions: {
-            Button("Clear Filters") {
-                filter.clear()
-            }
-            .buttonStyle(.bordered)
-        }
     }
 }
 

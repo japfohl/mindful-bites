@@ -33,6 +33,7 @@
 		AA0000010000000000000024 /* GalleryGridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000024 /* GalleryGridItem.swift */; };
 		AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000025 /* GalleryFilterSheet.swift */; };
 		AA0000010000000000000026 /* FoodGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000026 /* FoodGalleryView.swift */; };
+		AA0000010000000000000027 /* EditFoodEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000027 /* EditFoodEntryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		AA0000020000000000000024 /* GalleryGridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryGridItem.swift; sourceTree = "<group>"; };
 		AA0000020000000000000025 /* GalleryFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryFilterSheet.swift; sourceTree = "<group>"; };
 		AA0000020000000000000026 /* FoodGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodGalleryView.swift; sourceTree = "<group>"; };
+		AA0000020000000000000027 /* EditFoodEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoodEntryView.swift; sourceTree = "<group>"; };
 		AA0000030000000000000001 /* MindfulBites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindfulBites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -143,6 +145,7 @@
 				AA0000020000000000000024 /* GalleryGridItem.swift */,
 				AA0000020000000000000025 /* GalleryFilterSheet.swift */,
 				AA0000020000000000000026 /* FoodGalleryView.swift */,
+				AA0000020000000000000027 /* EditFoodEntryView.swift */,
 			);
 			path = Food;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 				AA0000010000000000000024 /* GalleryGridItem.swift in Sources */,
 				AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */,
 				AA0000010000000000000026 /* FoodGalleryView.swift in Sources */,
+				AA0000010000000000000027 /* EditFoodEntryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

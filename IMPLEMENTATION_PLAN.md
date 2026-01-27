@@ -202,6 +202,25 @@ MindfulBites/
 
 ---
 
+### Phase 3.5: Food View Refinements
+- [x] 13.5a. Add `title` field to FoodEntry model (defaults to timestamp)
+- [x] 13.5b. Auto-select MealType based on time of day when creating entries
+- [x] 13.5c. Compact header: remove "Food" title, inline toggle + filter + add button
+- [x] 13.5d. Unify filtering: single filter state for both timeline and gallery views
+- [x] 13.5e. Build EditFoodEntryView (edit title, description, photo, tags, meal type)
+- [x] 13.5f. Add edit button to FoodEntryDetailView
+- [x] 13.5g. Update FoodEntryRow to show title as primary text
+
+**Default Meal Time Ranges (hardcoded initially):**
+- Breakfast: 6:00 AM - 8:00 AM
+- Lunch: 11:00 AM - 1:00 PM
+- Dinner: 4:00 PM - 7:30 PM
+- Snack: All other times
+
+**Phase 3.5 Complete:** [x]
+
+---
+
 ### Phase 4: Weight Tracking
 - [ ] 18. Build AddWeightSheet
 - [ ] 19. Build WeightView with entry list
@@ -222,16 +241,20 @@ MindfulBites/
 - [ ] 28. Implement SettingsService (UserDefaults)
 - [ ] 29. Set up NotificationService
 - [ ] 30. Wire up reminder scheduling
+- [ ] 31. Add customizable meal time ranges to Settings
+  - User can set start/end times for Breakfast, Lunch, Dinner
+  - Times outside these ranges default to Snack
+  - Supports shift workers and non-standard schedules
 
 **Phase 5 Complete:** [ ]
 
 ---
 
 ### Phase 6: Polish
-- [ ] 31. Add empty states for all views
-- [ ] 32. Error handling (permissions, storage)
-- [ ] 33. Add app icon and launch screen
-- [ ] 34. Test on device
+- [ ] 32. Add empty states for all views
+- [ ] 33. Error handling (permissions, storage)
+- [ ] 34. Add app icon and launch screen
+- [ ] 35. Test on device
 
 **Phase 6 Complete:** [ ]
 

@@ -9,6 +9,7 @@ struct FoodEntryDetailView: View {
 
     @State private var fullImage: UIImage?
     @State private var showingDeleteConfirmation = false
+    @State private var showingEditSheet = false
 
     var body: some View {
         ScrollView {
@@ -17,7 +18,11 @@ struct FoodEntryDetailView: View {
                     photoSection
                 }
 
-                detailsSection
+                headerSection
+
+                if let text = entry.text, !text.isEmpty {
+                    descriptionSection(text: text)
+                }
 
                 if !entry.tags.isEmpty {
                     tagsSection
@@ -25,9 +30,16 @@ struct FoodEntryDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Entry")
+        .navigationTitle(entry.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showingEditSheet = true
+                } label: {
+                    Text("Edit")
+                }
+            }
             ToolbarItem(placement: .destructiveAction) {
                 Button(role: .destructive) {
                     showingDeleteConfirmation = true
@@ -35,6 +47,9 @@ struct FoodEntryDetailView: View {
                     Image(systemName: "trash")
                 }
             }
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            EditFoodEntryView(entry: entry)
         }
         .confirmationDialog("Delete Entry", isPresented: $showingDeleteConfirmation) {
             Button("Delete", role: .destructive) {
@@ -46,6 +61,14 @@ struct FoodEntryDetailView: View {
         }
         .task {
             await loadFullImage()
+        }
+        .onChange(of: showingEditSheet) { _, isShowing in
+            if !isShowing {
+                // Refresh photo if it might have changed
+                Task {
+                    await loadFullImage()
+                }
+            }
         }
     }
 
@@ -69,37 +92,40 @@ struct FoodEntryDetailView: View {
         }
     }
 
-    // MARK: - Details Section
+    // MARK: - Header Section
 
-    private var detailsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                if let mealType = entry.mealType {
-                    Label(mealType.displayName, systemImage: mealType.icon)
-                        .font(.subheadline)
-                        .foregroundColor(.accentColor)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(Color.accentColor.opacity(0.1))
-                        .clipShape(Capsule())
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing) {
-                    Text(entry.createdAt.formatted(date: .abbreviated, time: .omitted))
-                        .font(.subheadline)
-                    Text(entry.createdAt.formatted(date: .omitted, time: .shortened))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+    private var headerSection: some View {
+        HStack {
+            if let mealType = entry.mealType {
+                Label(mealType.displayName, systemImage: mealType.icon)
+                    .font(.subheadline)
+                    .foregroundColor(.accentColor)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.accentColor.opacity(0.1))
+                    .clipShape(Capsule())
             }
 
-            if let text = entry.text, !text.isEmpty {
-                Text(text)
-                    .font(.body)
-                    .padding(.top, 4)
+            Spacer()
+
+            VStack(alignment: .trailing) {
+                Text(entry.createdAt.formatted(date: .abbreviated, time: .omitted))
+                    .font(.subheadline)
+                Text(entry.createdAt.formatted(date: .omitted, time: .shortened))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
+        }
+    }
+
+    // MARK: - Description Section
+
+    private func descriptionSection(text: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("What I Had")
+                .font(.headline)
+            Text(text)
+                .font(.body)
         }
     }
 
@@ -126,7 +152,10 @@ struct FoodEntryDetailView: View {
     // MARK: - Actions
 
     private func loadFullImage() async {
-        guard let filename = entry.photoFileName else { return }
+        guard let filename = entry.photoFileName else {
+            fullImage = nil
+            return
+        }
 
         let image = await Task.detached(priority: .userInitiated) {
             PhotoStorageService.shared.loadPhoto(filename: filename)
@@ -197,9 +226,10 @@ struct FlowLayout: Layout {
 #Preview {
     NavigationStack {
         FoodEntryDetailView(entry: FoodEntry(
+            title: "Lunch at Olive Garden",
             text: "Delicious homemade pasta with tomato sauce and fresh basil",
-            photoFileName: nil,
             mealType: .dinner
         ))
     }
+    .modelContainer(for: [FoodEntry.self, Tag.self], inMemory: true)
 }

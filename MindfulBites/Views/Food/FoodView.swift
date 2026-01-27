@@ -1,9 +1,9 @@
 import SwiftUI
 import SwiftData
 
-enum FoodViewMode: String, CaseIterable {
-    case timeline = "Timeline"
-    case gallery = "Gallery"
+enum FoodViewMode: String {
+    case timeline
+    case gallery
 }
 
 struct FoodView: View {
@@ -13,44 +13,131 @@ struct FoodView: View {
     @State private var viewMode: FoodViewMode = .timeline
     @State private var showingAddEntry = false
     @State private var selectedEntry: FoodEntry?
+    @State private var filter = GalleryFilter()
+    @State private var showingFilter = false
+
+    private var filteredEntries: [FoodEntry] {
+        var result = entries
+
+        // Filter by date range
+        if let startDate = filter.startDate {
+            result = result.filter { $0.createdAt >= startDate }
+        }
+        if let endDate = filter.endDate {
+            result = result.filter { $0.createdAt < endDate }
+        }
+
+        // Filter by tags
+        if !filter.selectedTagIDs.isEmpty {
+            result = result.filter { entry in
+                entry.tags.contains { filter.selectedTagIDs.contains($0.id) }
+            }
+        }
+
+        return result
+    }
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                Picker("View Mode", selection: $viewMode) {
-                    ForEach(FoodViewMode.allCases, id: \.self) { mode in
-                        Text(mode.rawValue).tag(mode)
+            contentView
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            showingFilter = true
+                        } label: {
+                            Image(systemName: filter.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        }
                     }
-                }
-                .pickerStyle(.segmented)
-                .padding()
 
-                switch viewMode {
-                case .timeline:
-                    FoodTimelineView(entries: entries) { entry in
-                        selectedEntry = entry
+                    ToolbarItem(placement: .principal) {
+                        viewModePicker
                     }
-                case .gallery:
-                    FoodGalleryView(entries: entries) { entry in
-                        selectedEntry = entry
-                    }
-                }
-            }
-            .navigationTitle("Food")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddEntry = true
-                    } label: {
-                        Image(systemName: "plus")
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showingAddEntry = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
+                .sheet(isPresented: $showingAddEntry) {
+                    AddFoodEntryView()
+                }
+                .sheet(isPresented: $showingFilter) {
+                    GalleryFilterSheet(filter: $filter)
+                }
+                .navigationDestination(item: $selectedEntry) { entry in
+                    FoodEntryDetailView(entry: entry)
+                }
+        }
+    }
+
+    private var viewModePicker: some View {
+        HStack(spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    viewMode = .timeline
+                }
+            } label: {
+                Image(systemName: "list.bullet")
+                    .frame(width: 44, height: 32)
+                    .background(viewMode == .timeline ? Color.accentColor.opacity(0.2) : Color.clear)
             }
-            .sheet(isPresented: $showingAddEntry) {
-                AddFoodEntryView()
+            .foregroundColor(viewMode == .timeline ? .accentColor : .secondary)
+
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    viewMode = .gallery
+                }
+            } label: {
+                Image(systemName: "square.grid.2x2")
+                    .frame(width: 44, height: 32)
+                    .background(viewMode == .gallery ? Color.accentColor.opacity(0.2) : Color.clear)
             }
-            .navigationDestination(item: $selectedEntry) { entry in
-                FoodEntryDetailView(entry: entry)
+            .foregroundColor(viewMode == .gallery ? .accentColor : .secondary)
+        }
+        .background(Color(.systemGray5))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+
+    @ViewBuilder
+    private var contentView: some View {
+        if filteredEntries.isEmpty {
+            emptyState
+        } else {
+            switch viewMode {
+            case .timeline:
+                FoodTimelineView(entries: filteredEntries) { entry in
+                    selectedEntry = entry
+                }
+            case .gallery:
+                FoodGalleryView(entries: filteredEntries) { entry in
+                    selectedEntry = entry
+                }
+            }
+        }
+    }
+
+    private var emptyState: some View {
+        Group {
+            if entries.isEmpty {
+                ContentUnavailableView(
+                    "No Entries Yet",
+                    systemImage: "fork.knife",
+                    description: Text("Tap + to log your first meal")
+                )
+            } else {
+                ContentUnavailableView {
+                    Label("No Matching Entries", systemImage: "magnifyingglass")
+                } description: {
+                    Text("Try adjusting your filters")
+                } actions: {
+                    Button("Clear Filters") {
+                        filter.clear()
+                    }
+                    .buttonStyle(.bordered)
+                }
             }
         }
     }

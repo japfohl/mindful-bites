@@ -2,23 +2,27 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct AddFoodEntryView: View {
+struct EditFoodEntryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
+    let entry: FoodEntry
+
     @State private var title: String = ""
-    @State private var selectedImage: UIImage?
     @State private var text: String = ""
     @State private var mealType: MealType = .snack
     @State private var selectedTags: [Tag] = []
 
+    @State private var selectedImage: UIImage?
+    @State private var existingPhotoFilename: String?
+    @State private var photoWasDeleted = false
+
     @State private var showingCamera = false
     @State private var photosPickerItem: PhotosPickerItem?
 
-    private let createdAt = Date()
-
     private var canSave: Bool {
-        selectedImage != nil || !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        (selectedImage != nil || existingPhotoFilename != nil && !photoWasDeleted) ||
+        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     var body: some View {
@@ -33,7 +37,7 @@ struct AddFoodEntryView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Add Entry")
+            .navigationTitle("Edit Entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -43,7 +47,7 @@ struct AddFoodEntryView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        saveEntry()
+                        saveChanges()
                     }
                     .fontWeight(.semibold)
                     .disabled(!canSave)
@@ -52,6 +56,7 @@ struct AddFoodEntryView: View {
             .sheet(isPresented: $showingCamera) {
                 CameraPicker { image in
                     selectedImage = image
+                    photoWasDeleted = false
                 }
             }
             .onChange(of: photosPickerItem) { _, newValue in
@@ -59,14 +64,26 @@ struct AddFoodEntryView: View {
                     if let data = try? await newValue?.loadTransferable(type: Data.self),
                        let image = UIImage(data: data) {
                         selectedImage = image
+                        photoWasDeleted = false
                     }
                 }
             }
-            .onAppear {
-                // Set defaults based on current time
-                title = FoodEntry.defaultTitle(for: createdAt)
-                mealType = MealType.suggested(for: createdAt)
+            .task {
+                loadEntryData()
             }
+        }
+    }
+
+    private func loadEntryData() {
+        title = entry.title
+        text = entry.text ?? ""
+        mealType = entry.mealType ?? .snack
+        selectedTags = entry.tags
+        existingPhotoFilename = entry.photoFileName
+
+        // Load existing photo
+        if let filename = entry.photoFileName {
+            selectedImage = PhotoStorageService.shared.loadPhoto(filename: filename)
         }
     }
 
@@ -92,7 +109,7 @@ struct AddFoodEntryView: View {
             Text("Photo")
                 .font(.headline)
 
-            if let image = selectedImage {
+            if let image = selectedImage, !photoWasDeleted {
                 ZStack(alignment: .topTrailing) {
                     Image(uiImage: image)
                         .resizable()
@@ -103,6 +120,7 @@ struct AddFoodEntryView: View {
 
                     Button {
                         selectedImage = nil
+                        photoWasDeleted = true
                         photosPickerItem = nil
                     } label: {
                         Image(systemName: "xmark.circle.fill")
@@ -183,31 +201,45 @@ struct AddFoodEntryView: View {
 
     // MARK: - Save
 
-    private func saveEntry() {
-        var photoFilename: String?
-
-        if let image = selectedImage {
-            photoFilename = PhotoStorageService.shared.savePhoto(image)
+    private func saveChanges() {
+        // Handle photo changes
+        if photoWasDeleted {
+            // Delete old photo file
+            if let oldFilename = existingPhotoFilename {
+                PhotoStorageService.shared.deletePhoto(filename: oldFilename)
+                Task { await ThumbnailCache.shared.removeThumbnail(for: oldFilename) }
+            }
+            entry.photoFileName = nil
+        } else if let newImage = selectedImage, existingPhotoFilename == nil || photoWasDeleted {
+            // New photo was selected (either replacing or adding new)
+            if let oldFilename = existingPhotoFilename {
+                PhotoStorageService.shared.deletePhoto(filename: oldFilename)
+                Task { await ThumbnailCache.shared.removeThumbnail(for: oldFilename) }
+            }
+            entry.photoFileName = PhotoStorageService.shared.savePhoto(newImage)
         }
 
-        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Update other fields
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        entry.title = trimmedTitle.isEmpty ? FoodEntry.defaultTitle(for: entry.createdAt) : trimmedTitle
 
-        let entry = FoodEntry(
-            title: trimmedTitle.isEmpty ? nil : trimmedTitle,
-            text: trimmedText.isEmpty ? nil : trimmedText,
-            photoFileName: photoFilename,
-            mealType: mealType,
-            tags: selectedTags,
-            createdAt: createdAt
-        )
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        entry.text = trimmedText.isEmpty ? nil : trimmedText
 
-        modelContext.insert(entry)
+        entry.mealType = mealType
+        entry.tags = selectedTags
+
         dismiss()
     }
 }
 
 #Preview {
-    AddFoodEntryView()
+    let entry = FoodEntry(
+        title: "Test Entry",
+        text: "Some food description",
+        mealType: .lunch
+    )
+
+    return EditFoodEntryView(entry: entry)
         .modelContainer(for: [FoodEntry.self, Tag.self], inMemory: true)
 }

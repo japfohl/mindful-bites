@@ -24,28 +24,29 @@ struct FoodEntryRow: View {
             }
 
             VStack(alignment: .leading, spacing: 4) {
+                // Title as primary text
+                Text(entry.title)
+                    .font(.headline)
+                    .lineLimit(1)
+
+                // Meal type and time
                 HStack(spacing: 6) {
                     if let mealType = entry.mealType {
-                        Label(mealType.displayName, systemImage: mealType.icon)
-                            .font(.caption)
+                        Image(systemName: mealType.icon)
                             .foregroundColor(.accentColor)
                     }
 
                     Text(entry.createdAt.formatted(date: .omitted, time: .shortened))
-                        .font(.caption)
                         .foregroundColor(.secondary)
                 }
+                .font(.caption)
 
+                // Description as secondary text
                 if let text = entry.text, !text.isEmpty {
                     Text(text)
-                        .font(.body)
-                        .lineLimit(2)
-                        .foregroundColor(.primary)
-                } else if !entry.hasPhoto {
-                    Text("No description")
-                        .font(.body)
+                        .font(.subheadline)
+                        .lineLimit(1)
                         .foregroundColor(.secondary)
-                        .italic()
                 }
             }
 
@@ -60,9 +61,7 @@ struct FoodEntryRow: View {
     private func loadThumbnail() async {
         guard let filename = entry.photoFileName else { return }
 
-        let image = await Task.detached(priority: .utility) {
-            PhotoStorageService.shared.loadThumbnail(filename: filename, size: thumbnailSize)
-        }.value
+        let image = await ThumbnailCache.shared.thumbnail(for: filename, size: thumbnailSize)
 
         await MainActor.run {
             self.thumbnail = image
@@ -73,20 +72,20 @@ struct FoodEntryRow: View {
 #Preview {
     List {
         FoodEntryRow(entry: FoodEntry(
+            title: "Breakfast at Home",
             text: "Oatmeal with berries and honey",
-            photoFileName: nil,
             mealType: .breakfast
         ))
 
         FoodEntryRow(entry: FoodEntry(
+            title: "Quick Lunch",
             text: "Grilled chicken salad",
-            photoFileName: nil,
             mealType: .lunch
         ))
 
         FoodEntryRow(entry: FoodEntry(
+            title: "Afternoon Snack",
             text: nil,
-            photoFileName: nil,
             mealType: .snack
         ))
     }

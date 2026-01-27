@@ -1,17 +1,13 @@
 import SwiftUI
 
 struct MealTypePicker: View {
-    @Binding var selection: MealType?
+    @Binding var selection: MealType
 
     var body: some View {
         HStack(spacing: 12) {
             ForEach(MealType.allCases) { mealType in
                 Button {
-                    if selection == mealType {
-                        selection = nil
-                    } else {
-                        selection = mealType
-                    }
+                    selection = mealType
                 } label: {
                     VStack(spacing: 4) {
                         Image(systemName: mealType.icon)
@@ -39,7 +35,7 @@ struct MealTypePicker: View {
 
 #Preview {
     struct PreviewWrapper: View {
-        @State private var selection: MealType? = .breakfast
+        @State private var selection: MealType = .breakfast
 
         var body: some View {
             MealTypePicker(selection: $selection)
