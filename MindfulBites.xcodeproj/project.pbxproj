@@ -34,6 +34,9 @@
 		AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000025 /* GalleryFilterSheet.swift */; };
 		AA0000010000000000000026 /* FoodGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000026 /* FoodGalleryView.swift */; };
 		AA0000010000000000000027 /* EditFoodEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000027 /* EditFoodEntryView.swift */; };
+		AA0000010000000000000028 /* AddWeightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000028 /* AddWeightSheet.swift */; };
+		AA0000010000000000000029 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000029 /* WeightChartView.swift */; };
+		AA0000010000000000000030 /* EditWeightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000030 /* EditWeightSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +67,9 @@
 		AA0000020000000000000025 /* GalleryFilterSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryFilterSheet.swift; sourceTree = "<group>"; };
 		AA0000020000000000000026 /* FoodGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodGalleryView.swift; sourceTree = "<group>"; };
 		AA0000020000000000000027 /* EditFoodEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFoodEntryView.swift; sourceTree = "<group>"; };
+		AA0000020000000000000028 /* AddWeightSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeightSheet.swift; sourceTree = "<group>"; };
+		AA0000020000000000000029 /* WeightChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartView.swift; sourceTree = "<group>"; };
+		AA0000020000000000000030 /* EditWeightSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightSheet.swift; sourceTree = "<group>"; };
 		AA0000030000000000000001 /* MindfulBites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindfulBites.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -154,6 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				AA0000020000000000000011 /* WeightView.swift */,
+				AA0000020000000000000028 /* AddWeightSheet.swift */,
+				AA0000020000000000000029 /* WeightChartView.swift */,
+				AA0000020000000000000030 /* EditWeightSheet.swift */,
 			);
 			path = Weight;
 			sourceTree = "<group>";
@@ -303,6 +312,9 @@
 				AA0000010000000000000025 /* GalleryFilterSheet.swift in Sources */,
 				AA0000010000000000000026 /* FoodGalleryView.swift in Sources */,
 				AA0000010000000000000027 /* EditFoodEntryView.swift in Sources */,
+				AA0000010000000000000028 /* AddWeightSheet.swift in Sources */,
+				AA0000010000000000000029 /* WeightChartView.swift in Sources */,
+				AA0000010000000000000030 /* EditWeightSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

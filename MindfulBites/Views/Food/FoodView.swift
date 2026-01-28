@@ -82,7 +82,8 @@ struct FoodView: View {
             } label: {
                 Image(systemName: "list.bullet")
                     .frame(width: 44, height: 32)
-                    .background(viewMode == .timeline ? Color.accentColor.opacity(0.2) : Color.clear)
+                    .background(viewMode == .timeline ? Color.accentColor.opacity(0.15) : Color.clear)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
             }
             .foregroundColor(viewMode == .timeline ? .accentColor : .secondary)
 
@@ -93,12 +94,14 @@ struct FoodView: View {
             } label: {
                 Image(systemName: "square.grid.2x2")
                     .frame(width: 44, height: 32)
-                    .background(viewMode == .gallery ? Color.accentColor.opacity(0.2) : Color.clear)
+                    .background(viewMode == .gallery ? Color.accentColor.opacity(0.15) : Color.clear)
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
             }
             .foregroundColor(viewMode == .gallery ? .accentColor : .secondary)
         }
-        .background(Color(.systemGray5))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(2)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     @ViewBuilder

@@ -222,14 +222,14 @@ MindfulBites/
 ---
 
 ### Phase 4: Weight Tracking
-- [ ] 18. Build AddWeightSheet
-- [ ] 19. Build WeightView with entry list
-- [ ] 20. Implement one-entry-per-day logic
-- [ ] 21. Build WeightChartView with Swift Charts
-- [ ] 22. Add timeframe picker (1W/1M/3M/1Y/All)
-- [ ] 23. Implement unit conversion (stored kg, display per setting)
+- [x] 18. Build AddWeightSheet
+- [x] 19. Build WeightView with entry list
+- [x] 20. Implement one-entry-per-day logic
+- [x] 21. Build WeightChartView with Swift Charts
+- [x] 22. Add timeframe picker (1W/1M/3M/1Y/All)
+- [x] 23. Implement unit conversion (stored kg, display per setting)
 
-**Phase 4 Complete:** [ ]
+**Phase 4 Complete:** [x]
 
 ---
 

@@ -71,7 +71,7 @@ struct GalleryFilterSheet: View {
                     }
                 }
             }
-            .navigationTitle("Filter Gallery")
+            .navigationTitle("Filter")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
