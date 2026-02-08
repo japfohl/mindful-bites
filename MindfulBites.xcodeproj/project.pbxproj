@@ -37,7 +37,50 @@
 		AA0000010000000000000028 /* AddWeightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000028 /* AddWeightSheet.swift */; };
 		AA0000010000000000000029 /* WeightChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000029 /* WeightChartView.swift */; };
 		AA0000010000000000000030 /* EditWeightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000030 /* EditWeightSheet.swift */; };
+		AA0000010000000000000031 /* MealTimeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000031 /* MealTimeRange.swift */; };
+		AA0000010000000000000032 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000032 /* SettingsService.swift */; };
+		AA0000010000000000000033 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000033 /* NotificationService.swift */; };
+		AA0000010000000000000034 /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000034 /* StreakCard.swift */; };
+		AA0000010000000000000035 /* TrendCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000035 /* TrendCard.swift */; };
+		AA0000010000000000000036 /* StatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000036 /* StatCard.swift */; };
+		AA0000010000000000000037 /* MealTimeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000037 /* MealTimeSection.swift */; };
+		AA0000010000000000000038 /* InsightsCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000038 /* InsightsCalculator.swift */; };
+		AA0000010000000000000039 /* CloudStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000039 /* CloudStorageProvider.swift */; };
+		AA0000010000000000000040 /* BackupCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000040 /* BackupCodable.swift */; };
+		AA0000010000000000000041 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000041 /* BackupService.swift */; };
+		AA0000010000000000000042 /* GoogleDriveProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000042 /* GoogleDriveProvider.swift */; };
+		AA0000010000000000000043 /* CloudProviderRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000043 /* CloudProviderRegistry.swift */; };
+		AA0000010000000000000044 /* CloudBackupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000045 /* CloudBackupSection.swift */; };
+		AA0000010000000000000045 /* RestoreBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000020000000000000046 /* RestoreBackupView.swift */; };
+		CC0000010000000000000001 /* WeightUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000001 /* WeightUnitTests.swift */; };
+		CC0000010000000000000002 /* MealTimeRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000002 /* MealTimeRangeTests.swift */; };
+		CC0000010000000000000003 /* MealTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000003 /* MealTypeTests.swift */; };
+		CC0000010000000000000004 /* TimeframeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000004 /* TimeframeTests.swift */; };
+		CC0000010000000000000005 /* FoodEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000005 /* FoodEntryTests.swift */; };
+		CC0000010000000000000006 /* WeightEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000006 /* WeightEntryTests.swift */; };
+		CC0000010000000000000007 /* DateExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000007 /* DateExtensionsTests.swift */; };
+		CC0000010000000000000008 /* InsightsCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000008 /* InsightsCalculatorTests.swift */; };
+		CC0000010000000000000009 /* SettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000009 /* SettingsServiceTests.swift */; };
+		CC0000010000000000000010 /* PhotoStorageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000010 /* PhotoStorageServiceTests.swift */; };
+		CC0000010000000000000011 /* MockCloudStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000011 /* MockCloudStorageProvider.swift */; };
+		CC0000010000000000000012 /* BackupCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000012 /* BackupCodableTests.swift */; };
+		CC0000010000000000000013 /* BackupServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0000020000000000000013 /* BackupServiceTests.swift */; };
+		D882E7CF2F392A52009EC295 /* CODE_REVIEW.md in Resources */ = {isa = PBXBuildFile; fileRef = D882E7CE2F392A52009EC295 /* CODE_REVIEW.md */; };
+		DD0000030000000000000001 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000020000000000000001 /* GoogleSignIn */; };
+		DD0000030000000000000002 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000020000000000000002 /* GoogleSignInSwift */; };
+		DD0000030000000000000003 /* GoogleAPIClientForRESTCore in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000020000000000000003 /* GoogleAPIClientForRESTCore */; };
+		DD0000030000000000000004 /* GoogleAPIClientForREST_Drive in Frameworks */ = {isa = PBXBuildFile; productRef = DD0000020000000000000004 /* GoogleAPIClientForREST_Drive */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB0000010000000000000001 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AA00000A0000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA0000060000000000000001;
+			remoteInfo = MindfulBites;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		AA0000020000000000000001 /* MindfulBitesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindfulBitesApp.swift; sourceTree = "<group>"; };
@@ -70,11 +113,53 @@
 		AA0000020000000000000028 /* AddWeightSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeightSheet.swift; sourceTree = "<group>"; };
 		AA0000020000000000000029 /* WeightChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightChartView.swift; sourceTree = "<group>"; };
 		AA0000020000000000000030 /* EditWeightSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightSheet.swift; sourceTree = "<group>"; };
+		AA0000020000000000000031 /* MealTimeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTimeRange.swift; sourceTree = "<group>"; };
+		AA0000020000000000000032 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		AA0000020000000000000033 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		AA0000020000000000000034 /* StreakCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCard.swift; sourceTree = "<group>"; };
+		AA0000020000000000000035 /* TrendCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendCard.swift; sourceTree = "<group>"; };
+		AA0000020000000000000036 /* StatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCard.swift; sourceTree = "<group>"; };
+		AA0000020000000000000037 /* MealTimeSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTimeSection.swift; sourceTree = "<group>"; };
+		AA0000020000000000000038 /* InsightsCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCalculator.swift; sourceTree = "<group>"; };
+		AA0000020000000000000039 /* CloudStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudStorageProvider.swift; sourceTree = "<group>"; };
+		AA0000020000000000000040 /* BackupCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCodable.swift; sourceTree = "<group>"; };
+		AA0000020000000000000041 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
+		AA0000020000000000000042 /* GoogleDriveProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDriveProvider.swift; sourceTree = "<group>"; };
+		AA0000020000000000000043 /* CloudProviderRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudProviderRegistry.swift; sourceTree = "<group>"; };
+		AA0000020000000000000044 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA0000020000000000000045 /* CloudBackupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudBackupSection.swift; sourceTree = "<group>"; };
+		AA0000020000000000000046 /* RestoreBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreBackupView.swift; sourceTree = "<group>"; };
 		AA0000030000000000000001 /* MindfulBites.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindfulBites.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB0000030000000000000001 /* MindfulBitesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MindfulBitesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC0000020000000000000001 /* WeightUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightUnitTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000002 /* MealTimeRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTimeRangeTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000003 /* MealTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTypeTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000004 /* TimeframeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeframeTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000005 /* FoodEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodEntryTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000006 /* WeightEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightEntryTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000007 /* DateExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensionsTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000008 /* InsightsCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCalculatorTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000009 /* SettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsServiceTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000010 /* PhotoStorageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStorageServiceTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000011 /* MockCloudStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudStorageProvider.swift; sourceTree = "<group>"; };
+		CC0000020000000000000012 /* BackupCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupCodableTests.swift; sourceTree = "<group>"; };
+		CC0000020000000000000013 /* BackupServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupServiceTests.swift; sourceTree = "<group>"; };
+		D882E7CE2F392A52009EC295 /* CODE_REVIEW.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CODE_REVIEW.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		AA0000040000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD0000030000000000000001 /* GoogleSignIn in Frameworks */,
+				DD0000030000000000000002 /* GoogleSignInSwift in Frameworks */,
+				DD0000030000000000000003 /* GoogleAPIClientForRESTCore in Frameworks */,
+				DD0000030000000000000004 /* GoogleAPIClientForREST_Drive in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB0000040000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -87,7 +172,9 @@
 		AA0000050000000000000001 = {
 			isa = PBXGroup;
 			children = (
+				D882E7CE2F392A52009EC295 /* CODE_REVIEW.md */,
 				AA0000050000000000000002 /* MindfulBites */,
+				BB0000050000000000000001 /* MindfulBitesTests */,
 				AA0000050000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +190,7 @@
 				AA0000050000000000000010 /* Services */,
 				AA0000050000000000000011 /* Utilities */,
 				AA0000020000000000000003 /* Assets.xcassets */,
+				AA0000020000000000000044 /* Info.plist */,
 			);
 			path = MindfulBites;
 			sourceTree = "<group>";
@@ -111,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0000030000000000000001 /* MindfulBites.app */,
+				BB0000030000000000000001 /* MindfulBitesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +213,7 @@
 				AA0000020000000000000007 /* MealType.swift */,
 				AA0000020000000000000008 /* WeightUnit.swift */,
 				AA0000020000000000000009 /* Timeframe.swift */,
+				AA0000020000000000000031 /* MealTimeRange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -171,6 +261,9 @@
 			isa = PBXGroup;
 			children = (
 				AA0000020000000000000012 /* InsightsView.swift */,
+				AA0000020000000000000034 /* StreakCard.swift */,
+				AA0000020000000000000035 /* TrendCard.swift */,
+				AA0000020000000000000036 /* StatCard.swift */,
 			);
 			path = Insights;
 			sourceTree = "<group>";
@@ -187,6 +280,9 @@
 			children = (
 				AA0000020000000000000014 /* PhotoStorageService.swift */,
 				AA0000020000000000000023 /* ThumbnailCache.swift */,
+				AA0000020000000000000032 /* SettingsService.swift */,
+				AA0000020000000000000033 /* NotificationService.swift */,
+				AA0000050000000000000014 /* CloudSync */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -195,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				AA0000020000000000000021 /* Date+Extensions.swift */,
+				AA0000020000000000000038 /* InsightsCalculator.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -203,6 +300,9 @@
 			isa = PBXGroup;
 			children = (
 				AA0000020000000000000013 /* SettingsView.swift */,
+				AA0000020000000000000037 /* MealTimeSection.swift */,
+				AA0000020000000000000045 /* CloudBackupSection.swift */,
+				AA0000020000000000000046 /* RestoreBackupView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -215,6 +315,38 @@
 				AA0000020000000000000022 /* TagPicker.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		AA0000050000000000000014 /* CloudSync */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000020000000000000039 /* CloudStorageProvider.swift */,
+				AA0000020000000000000040 /* BackupCodable.swift */,
+				AA0000020000000000000041 /* BackupService.swift */,
+				AA0000020000000000000042 /* GoogleDriveProvider.swift */,
+				AA0000020000000000000043 /* CloudProviderRegistry.swift */,
+			);
+			path = CloudSync;
+			sourceTree = "<group>";
+		};
+		BB0000050000000000000001 /* MindfulBitesTests */ = {
+			isa = PBXGroup;
+			children = (
+				CC0000020000000000000001 /* WeightUnitTests.swift */,
+				CC0000020000000000000002 /* MealTimeRangeTests.swift */,
+				CC0000020000000000000003 /* MealTypeTests.swift */,
+				CC0000020000000000000004 /* TimeframeTests.swift */,
+				CC0000020000000000000005 /* FoodEntryTests.swift */,
+				CC0000020000000000000006 /* WeightEntryTests.swift */,
+				CC0000020000000000000007 /* DateExtensionsTests.swift */,
+				CC0000020000000000000008 /* InsightsCalculatorTests.swift */,
+				CC0000020000000000000009 /* SettingsServiceTests.swift */,
+				CC0000020000000000000010 /* PhotoStorageServiceTests.swift */,
+				CC0000020000000000000011 /* MockCloudStorageProvider.swift */,
+				CC0000020000000000000012 /* BackupCodableTests.swift */,
+				CC0000020000000000000013 /* BackupServiceTests.swift */,
+			);
+			path = MindfulBitesTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,9 +365,33 @@
 			dependencies = (
 			);
 			name = MindfulBites;
+			packageProductDependencies = (
+				DD0000020000000000000001 /* GoogleSignIn */,
+				DD0000020000000000000002 /* GoogleSignInSwift */,
+				DD0000020000000000000003 /* GoogleAPIClientForRESTCore */,
+				DD0000020000000000000004 /* GoogleAPIClientForREST_Drive */,
+			);
 			productName = MindfulBites;
 			productReference = AA0000030000000000000001 /* MindfulBites.app */;
 			productType = "com.apple.product-type.application";
+		};
+		BB0000060000000000000001 /* MindfulBitesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB0000080000000000000001 /* Build configuration list for PBXNativeTarget "MindfulBitesTests" */;
+			buildPhases = (
+				BB0000070000000000000001 /* Sources */,
+				BB0000040000000000000001 /* Frameworks */,
+				BB0000090000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB0000020000000000000001 /* PBXTargetDependency */,
+			);
+			name = MindfulBitesTests;
+			productName = MindfulBitesTests;
+			productReference = BB0000030000000000000001 /* MindfulBitesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -250,6 +406,10 @@
 					AA0000060000000000000001 = {
 						CreatedOnToolsVersion = 15.0;
 					};
+					BB0000060000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = AA0000060000000000000001;
+					};
 				};
 			};
 			buildConfigurationList = AA00000B0000000000000001 /* Build configuration list for PBXProject "MindfulBites" */;
@@ -261,11 +421,16 @@
 				Base,
 			);
 			mainGroup = AA0000050000000000000001;
+			packageReferences = (
+				DD0000010000000000000001 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				DD0000010000000000000002 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */,
+			);
 			productRefGroup = AA0000050000000000000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				AA0000060000000000000001 /* MindfulBites */,
+				BB0000060000000000000001 /* MindfulBitesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -276,6 +441,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA0000010000000000000003 /* Assets.xcassets in Resources */,
+				D882E7CF2F392A52009EC295 /* CODE_REVIEW.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB0000090000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,10 +488,53 @@
 				AA0000010000000000000028 /* AddWeightSheet.swift in Sources */,
 				AA0000010000000000000029 /* WeightChartView.swift in Sources */,
 				AA0000010000000000000030 /* EditWeightSheet.swift in Sources */,
+				AA0000010000000000000031 /* MealTimeRange.swift in Sources */,
+				AA0000010000000000000032 /* SettingsService.swift in Sources */,
+				AA0000010000000000000033 /* NotificationService.swift in Sources */,
+				AA0000010000000000000034 /* StreakCard.swift in Sources */,
+				AA0000010000000000000035 /* TrendCard.swift in Sources */,
+				AA0000010000000000000036 /* StatCard.swift in Sources */,
+				AA0000010000000000000037 /* MealTimeSection.swift in Sources */,
+				AA0000010000000000000038 /* InsightsCalculator.swift in Sources */,
+				AA0000010000000000000039 /* CloudStorageProvider.swift in Sources */,
+				AA0000010000000000000040 /* BackupCodable.swift in Sources */,
+				AA0000010000000000000041 /* BackupService.swift in Sources */,
+				AA0000010000000000000042 /* GoogleDriveProvider.swift in Sources */,
+				AA0000010000000000000043 /* CloudProviderRegistry.swift in Sources */,
+				AA0000010000000000000044 /* CloudBackupSection.swift in Sources */,
+				AA0000010000000000000045 /* RestoreBackupView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB0000070000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC0000010000000000000001 /* WeightUnitTests.swift in Sources */,
+				CC0000010000000000000002 /* MealTimeRangeTests.swift in Sources */,
+				CC0000010000000000000003 /* MealTypeTests.swift in Sources */,
+				CC0000010000000000000004 /* TimeframeTests.swift in Sources */,
+				CC0000010000000000000005 /* FoodEntryTests.swift in Sources */,
+				CC0000010000000000000006 /* WeightEntryTests.swift in Sources */,
+				CC0000010000000000000007 /* DateExtensionsTests.swift in Sources */,
+				CC0000010000000000000008 /* InsightsCalculatorTests.swift in Sources */,
+				CC0000010000000000000009 /* SettingsServiceTests.swift in Sources */,
+				CC0000010000000000000010 /* PhotoStorageServiceTests.swift in Sources */,
+				CC0000010000000000000011 /* MockCloudStorageProvider.swift in Sources */,
+				CC0000010000000000000012 /* BackupCodableTests.swift in Sources */,
+				CC0000010000000000000013 /* BackupServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BB0000020000000000000001 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AA0000060000000000000001 /* MindfulBites */;
+			targetProxy = BB0000010000000000000001 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		AA00000C0000000000000001 /* Debug */ = {
@@ -449,9 +665,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QCRKTAR9SQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MindfulBites/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindful Bites";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Mindful Bites uses your camera to capture photos of your meals.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Mindful Bites uses your photo library to select photos of your meals.";
@@ -480,9 +697,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = QCRKTAR9SQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MindfulBites/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Mindful Bites";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Mindful Bites uses your camera to capture photos of your meals.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Mindful Bites uses your photo library to select photos of your meals.";
@@ -501,6 +719,44 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BB00000D0000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QCRKTAR9SQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mindfulbites.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MindfulBites.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MindfulBites";
+			};
+			name = Debug;
+		};
+		BB00000D0000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QCRKTAR9SQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mindfulbites.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MindfulBites.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MindfulBites";
 			};
 			name = Release;
 		};
@@ -525,7 +781,58 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		BB0000080000000000000001 /* Build configuration list for PBXNativeTarget "MindfulBitesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB00000D0000000000000001 /* Debug */,
+				BB00000D0000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD0000010000000000000001 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+		DD0000010000000000000002 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/google-api-objectivec-client-for-rest";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD0000020000000000000001 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD0000010000000000000001 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		DD0000020000000000000002 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD0000010000000000000001 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		DD0000020000000000000003 /* GoogleAPIClientForRESTCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD0000010000000000000002 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForRESTCore;
+		};
+		DD0000020000000000000004 /* GoogleAPIClientForREST_Drive */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD0000010000000000000002 /* XCRemoteSwiftPackageReference "google-api-objectivec-client-for-rest" */;
+			productName = GoogleAPIClientForREST_Drive;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA00000A0000000000000001 /* Project object */;
 }

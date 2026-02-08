@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import GoogleSignIn
 
 @main
 struct MindfulBitesApp: App {
@@ -24,6 +25,13 @@ struct MindfulBitesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL { url in
+                    GIDSignIn.sharedInstance.handle(url)
+                }
+                .task {
+                    await NotificationService.shared.syncWithSettings()
+                    await CloudProviderRegistry.shared.restorePreviousSession()
+                }
         }
         .modelContainer(sharedModelContainer)
     }

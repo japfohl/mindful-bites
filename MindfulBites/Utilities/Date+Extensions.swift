@@ -1,6 +1,14 @@
 import Foundation
 
 extension Date {
+    /// Returns the number of calendar days between this date and another date
+    func daysBetween(_ other: Date) -> Int {
+        let calendar = Calendar.current
+        let startOfSelf = calendar.startOfDay(for: self)
+        let startOfOther = calendar.startOfDay(for: other)
+        let components = calendar.dateComponents([.day], from: startOfSelf, to: startOfOther)
+        return abs(components.day ?? 0)
+    }
     /// Returns true if this date is today
     var isToday: Bool {
         Calendar.current.isDateInToday(self)

@@ -1,34 +1,39 @@
 import Foundation
 import UIKit
 
+protocol PhotoStorageServiceProtocol {
+    func savePhoto(_ image: UIImage) -> String?
+    func loadPhoto(filename: String) -> UIImage?
+    func deletePhoto(filename: String)
+    func loadThumbnail(filename: String, size: CGSize) -> UIImage?
+    func photoFileURL(filename: String) -> URL
+    func allPhotoFilenames() -> [String]
+}
+
 /// Service for saving and loading food photos to the Documents directory.
 /// Photos are stored as JPEG files, not in SwiftData, for better performance.
-final class PhotoStorageService {
+final class PhotoStorageService: PhotoStorageServiceProtocol {
     static let shared = PhotoStorageService()
 
     private let fileManager = FileManager.default
     private let compressionQuality: CGFloat = 0.8
+    let photosDirectory: URL
 
-    private init() {}
-
-    // MARK: - Directory Management
-
-    private var photosDirectory: URL {
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let photosURL = documentsURL.appendingPathComponent("FoodPhotos", isDirectory: true)
-
-        if !fileManager.fileExists(atPath: photosURL.path) {
-            try? fileManager.createDirectory(at: photosURL, withIntermediateDirectories: true)
+    init(photosDirectory: URL? = nil) {
+        if let dir = photosDirectory {
+            self.photosDirectory = dir
+        } else {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            self.photosDirectory = documentsURL.appendingPathComponent("FoodPhotos", isDirectory: true)
         }
 
-        return photosURL
+        if !FileManager.default.fileExists(atPath: self.photosDirectory.path) {
+            try? FileManager.default.createDirectory(at: self.photosDirectory, withIntermediateDirectories: true)
+        }
     }
 
     // MARK: - Save Photo
 
-    /// Saves a photo and returns the filename for storage in SwiftData.
-    /// - Parameter image: The UIImage to save
-    /// - Returns: The filename of the saved photo, or nil if save failed
     func savePhoto(_ image: UIImage) -> String? {
         let filename = generateFilename()
         let fileURL = photosDirectory.appendingPathComponent(filename)
@@ -48,9 +53,6 @@ final class PhotoStorageService {
 
     // MARK: - Load Photo
 
-    /// Loads a photo from the Documents directory.
-    /// - Parameter filename: The filename of the photo to load
-    /// - Returns: The UIImage, or nil if not found
     func loadPhoto(filename: String) -> UIImage? {
         let fileURL = photosDirectory.appendingPathComponent(filename)
 
@@ -65,8 +67,6 @@ final class PhotoStorageService {
 
     // MARK: - Delete Photo
 
-    /// Deletes a photo from the Documents directory.
-    /// - Parameter filename: The filename of the photo to delete
     func deletePhoto(filename: String) {
         let fileURL = photosDirectory.appendingPathComponent(filename)
         try? fileManager.removeItem(at: fileURL)
@@ -74,17 +74,23 @@ final class PhotoStorageService {
 
     // MARK: - Thumbnail
 
-    /// Creates a thumbnail of the specified size from a photo.
-    /// - Parameters:
-    ///   - filename: The filename of the photo
-    ///   - size: The target size for the thumbnail
-    /// - Returns: A resized UIImage, or nil if loading failed
     func loadThumbnail(filename: String, size: CGSize) -> UIImage? {
         guard let image = loadPhoto(filename: filename) else {
             return nil
         }
 
         return image.preparingThumbnail(of: size)
+    }
+
+    // MARK: - File Access
+
+    func photoFileURL(filename: String) -> URL {
+        photosDirectory.appendingPathComponent(filename)
+    }
+
+    func allPhotoFilenames() -> [String] {
+        (try? fileManager.contentsOfDirectory(atPath: photosDirectory.path))?
+            .filter { $0.hasSuffix(".jpg") } ?? []
     }
 
     // MARK: - Helpers

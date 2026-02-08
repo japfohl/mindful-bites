@@ -27,6 +27,14 @@ struct FoodView: View {
             result = result.filter { $0.createdAt < endDate }
         }
 
+        // Filter by meal type
+        if !filter.selectedMealTypes.isEmpty {
+            result = result.filter { entry in
+                guard let mealType = entry.mealType else { return false }
+                return filter.selectedMealTypes.contains(mealType)
+            }
+        }
+
         // Filter by tags
         if !filter.selectedTagIDs.isEmpty {
             result = result.filter { entry in

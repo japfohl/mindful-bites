@@ -5,15 +5,17 @@ struct GalleryFilter: Equatable {
     var startDate: Date?
     var endDate: Date?
     var selectedTagIDs: Set<UUID> = []
+    var selectedMealTypes: Set<MealType> = []
 
     var isActive: Bool {
-        startDate != nil || endDate != nil || !selectedTagIDs.isEmpty
+        startDate != nil || endDate != nil || !selectedTagIDs.isEmpty || !selectedMealTypes.isEmpty
     }
 
     mutating func clear() {
         startDate = nil
         endDate = nil
         selectedTagIDs.removeAll()
+        selectedMealTypes.removeAll()
     }
 }
 
@@ -27,6 +29,16 @@ struct GalleryFilterSheet: View {
     @State private var localEndDate: Date = Date()
     @State private var useDateRange: Bool = false
     @State private var localSelectedTagIDs: Set<UUID> = []
+    @State private var localSelectedMealTypes: Set<MealType> = []
+    @State private var showingFromPicker: Bool = false
+    @State private var showingToPicker: Bool = false
+
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter
+    }()
 
     var body: some View {
         NavigationStack {
@@ -35,11 +47,82 @@ struct GalleryFilterSheet: View {
                     Toggle("Filter by date", isOn: $useDateRange)
 
                     if useDateRange {
-                        DatePicker("From", selection: $localStartDate, displayedComponents: .date)
-                        DatePicker("To", selection: $localEndDate, displayedComponents: .date)
+                        Button {
+                            withAnimation {
+                                showingFromPicker.toggle()
+                                if showingFromPicker { showingToPicker = false }
+                            }
+                        } label: {
+                            HStack {
+                                Text("From")
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text(dateFormatter.string(from: localStartDate))
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 7)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                                    .foregroundColor(.primary)
+                            }
+                        }
+
+                        if showingFromPicker {
+                            DatePicker("", selection: $localStartDate, in: ...localEndDate, displayedComponents: .date)
+                                .datePickerStyle(.graphical)
+                                .labelsHidden()
+                        }
+
+                        Button {
+                            withAnimation {
+                                showingToPicker.toggle()
+                                if showingToPicker { showingFromPicker = false }
+                            }
+                        } label: {
+                            HStack {
+                                Text("To")
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Text(dateFormatter.string(from: localEndDate))
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 7)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(Capsule())
+                                    .foregroundColor(.primary)
+                            }
+                        }
+
+                        if showingToPicker {
+                            DatePicker("", selection: $localEndDate, in: localStartDate..., displayedComponents: .date)
+                                .datePickerStyle(.graphical)
+                                .labelsHidden()
+                        }
                     }
                 } header: {
                     Text("Date Range")
+                }
+
+                Section {
+                    ForEach(MealType.allCases) { mealType in
+                        Button {
+                            toggleMealType(mealType)
+                        } label: {
+                            HStack {
+                                Image(systemName: mealType.icon)
+                                    .frame(width: 24)
+                                Text(mealType.displayName)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                if localSelectedMealTypes.contains(mealType) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                        }
+                    }
+                } header: {
+                    Text("Meal Type")
+                } footer: {
+                    Text("Show only entries of selected meal types")
                 }
 
                 Section {
@@ -47,27 +130,30 @@ struct GalleryFilterSheet: View {
                         Text("No tags created yet")
                             .foregroundColor(.secondary)
                     } else {
-                        ForEach(allTags) { tag in
-                            Button {
-                                toggleTag(tag)
-                            } label: {
-                                HStack {
+                        FlowLayout(spacing: 8) {
+                            ForEach(allTags) { tag in
+                                let isSelected = localSelectedTagIDs.contains(tag.id)
+                                Button {
+                                    toggleTag(tag)
+                                } label: {
                                     Text(tag.name)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    if localSelectedTagIDs.contains(tag.id) {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(.accentColor)
-                                    }
+                                        .font(.subheadline)
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(isSelected ? Color.accentColor : Color(.tertiarySystemFill))
+                                        .foregroundColor(isSelected ? .white : .primary)
+                                        .clipShape(Capsule())
                                 }
+                                .buttonStyle(.plain)
                             }
                         }
+                        .padding(.vertical, 4)
                     }
                 } header: {
                     Text("Tags")
                 } footer: {
                     if !allTags.isEmpty {
-                        Text("Select tags to filter. Photos with any selected tag will be shown.")
+                        Text("Tap to select. Entries with any selected tag will be shown.")
                     }
                 }
             }
@@ -90,12 +176,20 @@ struct GalleryFilterSheet: View {
                     Button("Clear Filters") {
                         clearFilters()
                     }
-                    .disabled(!useDateRange && localSelectedTagIDs.isEmpty)
+                    .disabled(!useDateRange && localSelectedTagIDs.isEmpty && localSelectedMealTypes.isEmpty)
                 }
             }
             .onAppear {
                 loadCurrentFilter()
             }
+        }
+    }
+
+    private func toggleMealType(_ mealType: MealType) {
+        if localSelectedMealTypes.contains(mealType) {
+            localSelectedMealTypes.remove(mealType)
+        } else {
+            localSelectedMealTypes.insert(mealType)
         }
     }
 
@@ -116,18 +210,21 @@ struct GalleryFilterSheet: View {
             localEndDate = end
         }
         localSelectedTagIDs = filter.selectedTagIDs
+        localSelectedMealTypes = filter.selectedMealTypes
     }
 
     private func applyFilter() {
         filter.startDate = useDateRange ? localStartDate.startOfDay : nil
         filter.endDate = useDateRange ? Calendar.current.date(byAdding: .day, value: 1, to: localEndDate.startOfDay) : nil
         filter.selectedTagIDs = localSelectedTagIDs
+        filter.selectedMealTypes = localSelectedMealTypes
         dismiss()
     }
 
     private func clearFilters() {
         useDateRange = false
         localSelectedTagIDs.removeAll()
+        localSelectedMealTypes.removeAll()
     }
 }
 
