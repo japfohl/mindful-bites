@@ -3,6 +3,7 @@ import UIKit
 @testable import MindfulBites
 
 final class MockCloudStorageProvider: CloudStorageProvider {
+    var providerID: String = "mock"
     var providerName: String = "Mock"
     var providerIcon: String = "cloud"
     var authState: CloudAuthState = .signedIn(email: "test@example.com")

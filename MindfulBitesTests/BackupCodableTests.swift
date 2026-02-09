@@ -83,7 +83,7 @@ final class BackupCodableTests: XCTestCase {
 
     func testSettingsDTORoundTrip() throws {
         let dto = SettingsDTO(
-            weightUnit: "kg",
+            weightUnit: .kg,
             reminderEnabled: true,
             reminderHour: 8,
             reminderMinute: 30,
@@ -158,7 +158,7 @@ final class BackupCodableTests: XCTestCase {
                 WeightEntryDTO(id: UUID(), date: now, weight: 80.0, notes: nil),
             ],
             settings: SettingsDTO(
-                weightUnit: "lbs",
+                weightUnit: .lbs,
                 reminderEnabled: false,
                 reminderHour: 8,
                 reminderMinute: 0,

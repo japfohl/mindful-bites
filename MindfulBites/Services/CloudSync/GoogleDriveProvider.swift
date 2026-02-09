@@ -7,6 +7,7 @@ import GoogleAPIClientForREST_Drive
 final class GoogleDriveProvider: CloudStorageProvider {
     static let shared = GoogleDriveProvider()
 
+    nonisolated let providerID = "google-drive"
     nonisolated let providerName = "Google Drive"
     nonisolated let providerIcon = "externaldrive.fill"
 
@@ -15,7 +16,7 @@ final class GoogleDriveProvider: CloudStorageProvider {
     private var folderIDCache: [String: String] = [:]
     private let driveScope = "https://www.googleapis.com/auth/drive.file"
 
-    init() {}
+    private init() {}
 
     // MARK: - Auth
 

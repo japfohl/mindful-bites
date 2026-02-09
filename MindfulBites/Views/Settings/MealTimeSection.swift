@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MealTimeSection: View {
-    @State private var settings = SettingsService.shared
+    var settings: SettingsService = .shared
     @State private var showingResetConfirmation = false
 
     var body: some View {

@@ -87,6 +87,7 @@ enum CloudStorageError: LocalizedError {
 // MARK: - Protocol
 
 protocol CloudStorageProvider: AnyObject {
+    var providerID: String { get }
     var providerName: String { get }
     var providerIcon: String { get }
     var authState: CloudAuthState { get }

@@ -1,12 +1,21 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var weightUnit: WeightUnit = SettingsService.shared.weightUnit
-    @State private var weightReminderEnabled: Bool = SettingsService.shared.weightReminderEnabled
-    @State private var weightReminderTime: Date = SettingsService.shared.weightReminderTime
+    var settings: SettingsService
+    var notifications: NotificationService
+
+    @State private var weightUnit: WeightUnit
+    @State private var weightReminderEnabled: Bool
+    @State private var weightReminderTime: Date
     @State private var showingPermissionAlert = false
 
-    private var notifications: NotificationService { NotificationService.shared }
+    init(settings: SettingsService = .shared, notifications: NotificationService = .shared) {
+        self.settings = settings
+        self.notifications = notifications
+        _weightUnit = State(initialValue: settings.weightUnit)
+        _weightReminderEnabled = State(initialValue: settings.weightReminderEnabled)
+        _weightReminderTime = State(initialValue: settings.weightReminderTime)
+    }
 
     var body: some View {
         NavigationStack {
@@ -18,7 +27,7 @@ struct SettingsView: View {
                         }
                     }
                     .onChange(of: weightUnit) { _, newValue in
-                        SettingsService.shared.weightUnit = newValue
+                        settings.weightUnit = newValue
                     }
                 }
 
@@ -37,9 +46,9 @@ struct SettingsView: View {
                             displayedComponents: .hourAndMinute
                         )
                         .onChange(of: weightReminderTime) { _, newValue in
-                            SettingsService.shared.weightReminderTime = newValue
+                            settings.weightReminderTime = newValue
                             Task {
-                                await NotificationService.shared.syncWithSettings()
+                                await notifications.syncWithSettings()
                             }
                         }
                     }
@@ -81,16 +90,16 @@ struct SettingsView: View {
         if enabled {
             let granted = await requestNotificationPermissionIfNeeded()
             if granted {
-                SettingsService.shared.weightReminderEnabled = true
-                await NotificationService.shared.syncWithSettings()
+                settings.weightReminderEnabled = true
+                await notifications.syncWithSettings()
             } else {
                 // Permission denied - revert the toggle
                 weightReminderEnabled = false
                 showingPermissionAlert = true
             }
         } else {
-            SettingsService.shared.weightReminderEnabled = false
-            NotificationService.shared.cancelWeightReminder()
+            settings.weightReminderEnabled = false
+            notifications.cancelWeightReminder()
         }
     }
 

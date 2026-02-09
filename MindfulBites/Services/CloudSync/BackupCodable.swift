@@ -25,7 +25,7 @@ struct WeightEntryDTO: Codable, Equatable {
 }
 
 struct SettingsDTO: Codable, Equatable {
-    let weightUnit: String
+    let weightUnit: WeightUnit
     let reminderEnabled: Bool
     let reminderHour: Int
     let reminderMinute: Int
@@ -35,6 +35,7 @@ struct SettingsDTO: Codable, Equatable {
 // MARK: - Manifest
 
 struct BackupManifest: Codable, Equatable, Identifiable {
+    let id: UUID
     let version: Int
     let createdAt: Date
     let appVersion: String
@@ -43,10 +44,42 @@ struct BackupManifest: Codable, Equatable, Identifiable {
     let weightEntryCount: Int
     let tagCount: Int
     let photoFileNames: [String]
+    let backupFileName: String?
 
-    var id: Date { createdAt }
+    var resolvedBackupFileName: String {
+        if let name = backupFileName { return name }
+        let formatter = ISO8601DateFormatter()
+        return "backup_\(formatter.string(from: createdAt)).json"
+    }
 
     static let currentVersion = 1
+
+    init(id: UUID = UUID(), version: Int, createdAt: Date, appVersion: String, deviceName: String, foodEntryCount: Int, weightEntryCount: Int, tagCount: Int, photoFileNames: [String], backupFileName: String? = nil) {
+        self.id = id
+        self.version = version
+        self.createdAt = createdAt
+        self.appVersion = appVersion
+        self.deviceName = deviceName
+        self.foodEntryCount = foodEntryCount
+        self.weightEntryCount = weightEntryCount
+        self.tagCount = tagCount
+        self.photoFileNames = photoFileNames
+        self.backupFileName = backupFileName
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = (try? container.decode(UUID.self, forKey: .id)) ?? UUID()
+        self.version = try container.decode(Int.self, forKey: .version)
+        self.createdAt = try container.decode(Date.self, forKey: .createdAt)
+        self.appVersion = try container.decode(String.self, forKey: .appVersion)
+        self.deviceName = try container.decode(String.self, forKey: .deviceName)
+        self.foodEntryCount = try container.decode(Int.self, forKey: .foodEntryCount)
+        self.weightEntryCount = try container.decode(Int.self, forKey: .weightEntryCount)
+        self.tagCount = try container.decode(Int.self, forKey: .tagCount)
+        self.photoFileNames = try container.decode([String].self, forKey: .photoFileNames)
+        self.backupFileName = try? container.decode(String.self, forKey: .backupFileName)
+    }
 }
 
 // MARK: - Full Backup
@@ -95,7 +128,7 @@ extension WeightEntry {
 extension SettingsService {
     func toDTO() -> SettingsDTO {
         SettingsDTO(
-            weightUnit: weightUnit.rawValue,
+            weightUnit: weightUnit,
             reminderEnabled: weightReminderEnabled,
             reminderHour: weightReminderHour,
             reminderMinute: weightReminderMinute,
@@ -104,9 +137,7 @@ extension SettingsService {
     }
 
     func apply(dto: SettingsDTO) {
-        if let unit = WeightUnit(rawValue: dto.weightUnit) {
-            weightUnit = unit
-        }
+        weightUnit = dto.weightUnit
         weightReminderEnabled = dto.reminderEnabled
         weightReminderHour = dto.reminderHour
         weightReminderMinute = dto.reminderMinute

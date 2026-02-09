@@ -1,4 +1,38 @@
 import Foundation
+import SwiftUI
+
+enum WeightTrend {
+    case up
+    case down
+    case stable
+    case notEnoughData
+
+    var message: String {
+        switch self {
+        case .up: return "Trending upward"
+        case .down: return "Trending downward"
+        case .stable: return "Holding steady"
+        case .notEnoughData: return "Log more weight to see trends"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .up: return "arrow.up.right"
+        case .down: return "arrow.down.right"
+        case .stable: return "equal"
+        case .notEnoughData: return "chart.line.uptrend.xyaxis"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .up: return .orange
+        case .down: return .teal
+        case .stable, .notEnoughData: return .secondary
+        }
+    }
+}
 
 struct InsightsCalculator {
 

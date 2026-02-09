@@ -7,8 +7,7 @@ enum FoodViewMode: String {
 }
 
 struct FoodView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \FoodEntry.createdAt, order: .reverse) private var entries: [FoodEntry]
+    @Query(sort: \FoodEntry.createdAt, order: .reverse) private var allEntries: [FoodEntry]
 
     @State private var viewMode: FoodViewMode = .timeline
     @State private var showingAddEntry = false
@@ -16,68 +15,48 @@ struct FoodView: View {
     @State private var filter = GalleryFilter()
     @State private var showingFilter = false
 
-    private var filteredEntries: [FoodEntry] {
-        var result = entries
-
-        // Filter by date range
-        if let startDate = filter.startDate {
-            result = result.filter { $0.createdAt >= startDate }
-        }
-        if let endDate = filter.endDate {
-            result = result.filter { $0.createdAt < endDate }
-        }
-
-        // Filter by meal type
-        if !filter.selectedMealTypes.isEmpty {
-            result = result.filter { entry in
-                guard let mealType = entry.mealType else { return false }
-                return filter.selectedMealTypes.contains(mealType)
-            }
-        }
-
-        // Filter by tags
-        if !filter.selectedTagIDs.isEmpty {
-            result = result.filter { entry in
-                entry.tags.contains { filter.selectedTagIDs.contains($0.id) }
-            }
-        }
-
-        return result
-    }
-
     var body: some View {
         NavigationStack {
-            contentView
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            showingFilter = true
-                        } label: {
-                            Image(systemName: filter.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
-                        }
+            FilteredFoodContent(
+                startDate: filter.startDate,
+                endDate: filter.endDate,
+                selectedMealTypes: filter.selectedMealTypes,
+                selectedTagIDs: filter.selectedTagIDs,
+                viewMode: viewMode,
+                hasAnyEntries: !allEntries.isEmpty,
+                selectedEntry: $selectedEntry,
+                onClearFilters: { filter.clear() }
+            )
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showingFilter = true
+                    } label: {
+                        Image(systemName: filter.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
                     }
+                }
 
-                    ToolbarItem(placement: .principal) {
-                        viewModePicker
-                    }
+                ToolbarItem(placement: .principal) {
+                    viewModePicker
+                }
 
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            showingAddEntry = true
-                        } label: {
-                            Image(systemName: "plus")
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showingAddEntry = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
-                .sheet(isPresented: $showingAddEntry) {
-                    AddFoodEntryView()
-                }
-                .sheet(isPresented: $showingFilter) {
-                    GalleryFilterSheet(filter: $filter)
-                }
-                .navigationDestination(item: $selectedEntry) { entry in
-                    FoodEntryDetailView(entry: entry)
-                }
+            }
+            .sheet(isPresented: $showingAddEntry) {
+                AddFoodEntryView()
+            }
+            .sheet(isPresented: $showingFilter) {
+                GalleryFilterSheet(filter: $filter)
+            }
+            .navigationDestination(item: $selectedEntry) { entry in
+                FoodEntryDetailView(entry: entry)
+            }
         }
     }
 
@@ -111,9 +90,83 @@ struct FoodView: View {
         .background(.ultraThinMaterial)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
+}
 
-    @ViewBuilder
-    private var contentView: some View {
+// MARK: - FilteredFoodContent
+
+/// A subview that uses @Query with date predicates pushed to the SwiftData
+/// query level, while keeping tag and meal-type filtering in-memory.
+private struct FilteredFoodContent: View {
+    @Query private var entries: [FoodEntry]
+
+    let selectedMealTypes: Set<MealType>
+    let selectedTagIDs: Set<UUID>
+    let viewMode: FoodViewMode
+    let hasAnyEntries: Bool
+    @Binding var selectedEntry: FoodEntry?
+    let onClearFilters: () -> Void
+
+    init(
+        startDate: Date?,
+        endDate: Date?,
+        selectedMealTypes: Set<MealType>,
+        selectedTagIDs: Set<UUID>,
+        viewMode: FoodViewMode,
+        hasAnyEntries: Bool,
+        selectedEntry: Binding<FoodEntry?>,
+        onClearFilters: @escaping () -> Void
+    ) {
+        // Build a FetchDescriptor with date predicates at the database level
+        var descriptor = FetchDescriptor<FoodEntry>(
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+
+        if let start = startDate, let end = endDate {
+            descriptor.predicate = #Predicate<FoodEntry> { entry in
+                entry.createdAt >= start && entry.createdAt < end
+            }
+        } else if let start = startDate {
+            descriptor.predicate = #Predicate<FoodEntry> { entry in
+                entry.createdAt >= start
+            }
+        } else if let end = endDate {
+            descriptor.predicate = #Predicate<FoodEntry> { entry in
+                entry.createdAt < end
+            }
+        }
+
+        _entries = Query(descriptor)
+
+        self.selectedMealTypes = selectedMealTypes
+        self.selectedTagIDs = selectedTagIDs
+        self.viewMode = viewMode
+        self.hasAnyEntries = hasAnyEntries
+        self._selectedEntry = selectedEntry
+        self.onClearFilters = onClearFilters
+    }
+
+    /// Apply tag and meal-type filters in-memory (SwiftData #Predicate
+    /// does not support relationship traversal or optional enum matching).
+    private var filteredEntries: [FoodEntry] {
+        var result = entries
+
+        if !selectedMealTypes.isEmpty {
+            result = result.filter { entry in
+                guard let mealType = entry.mealType else { return false }
+                return selectedMealTypes.contains(mealType)
+            }
+        }
+
+        if !selectedTagIDs.isEmpty {
+            result = result.filter { entry in
+                entry.tags.contains { selectedTagIDs.contains($0.id) }
+            }
+        }
+
+        return result
+    }
+
+    var body: some View {
         if filteredEntries.isEmpty {
             emptyState
         } else {
@@ -132,7 +185,7 @@ struct FoodView: View {
 
     private var emptyState: some View {
         Group {
-            if entries.isEmpty {
+            if !hasAnyEntries {
                 ContentUnavailableView(
                     "No Entries Yet",
                     systemImage: "fork.knife",
@@ -145,7 +198,7 @@ struct FoodView: View {
                     Text("Try adjusting your filters")
                 } actions: {
                     Button("Clear Filters") {
-                        filter.clear()
+                        onClearFilters()
                     }
                     .buttonStyle(.bordered)
                 }

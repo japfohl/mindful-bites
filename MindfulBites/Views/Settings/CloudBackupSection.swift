@@ -49,7 +49,7 @@ struct CloudBackupSection: View {
 
     @ViewBuilder
     private var signedOutContent: some View {
-        ForEach(Array(registry.providers.enumerated()), id: \.offset) { _, provider in
+        ForEach(Array(registry.providers.enumerated()), id: \.element.providerID) { _, provider in
             Button {
                 Task { await signIn(provider: provider) }
             } label: {

@@ -110,8 +110,7 @@ struct RestoreBackupView: View {
 
     @MainActor
     private func restoreBackup(_ manifest: BackupManifest) async {
-        let formatter = ISO8601DateFormatter()
-        let fileName = "backup_\(formatter.string(from: manifest.createdAt)).json"
+        let fileName = manifest.resolvedBackupFileName
 
         do {
             let result = try await backupService.performRestore(

@@ -24,6 +24,7 @@ final class SettingsService: SettingsServiceProtocol {
         static let weightReminderHour = "weightReminderHour"
         static let weightReminderMinute = "weightReminderMinute"
         static let mealTimeRanges = "mealTimeRanges"
+        static let weightReminderHourSet = "weightReminderHourSet"
     }
 
     // MARK: - Weight Unit
@@ -48,10 +49,15 @@ final class SettingsService: SettingsServiceProtocol {
 
     var weightReminderHour: Int {
         get {
-            let value = defaults.integer(forKey: Keys.weightReminderHour)
-            return value == 0 && !defaults.bool(forKey: Keys.weightReminderEnabled) ? 8 : value
+            if defaults.bool(forKey: Keys.weightReminderHourSet) {
+                return defaults.integer(forKey: Keys.weightReminderHour)
+            }
+            return 8 // Default to 8 AM when never set
         }
-        set { defaults.set(newValue, forKey: Keys.weightReminderHour) }
+        set {
+            defaults.set(newValue, forKey: Keys.weightReminderHour)
+            defaults.set(true, forKey: Keys.weightReminderHourSet)
+        }
     }
 
     var weightReminderMinute: Int {

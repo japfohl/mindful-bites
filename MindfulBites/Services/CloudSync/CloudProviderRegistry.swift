@@ -11,6 +11,11 @@ final class CloudProviderRegistry {
         providers = [GoogleDriveProvider.shared]
     }
 
+    func register(_ provider: any CloudStorageProvider) {
+        guard !providers.contains(where: { $0.providerID == provider.providerID }) else { return }
+        providers.append(provider)
+    }
+
     func restorePreviousSession() async {
         for provider in providers {
             if await provider.restorePreviousSignIn() {

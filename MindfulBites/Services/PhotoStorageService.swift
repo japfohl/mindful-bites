@@ -1,4 +1,5 @@
 import Foundation
+import os
 import UIKit
 
 protocol PhotoStorageServiceProtocol {
@@ -18,6 +19,7 @@ final class PhotoStorageService: PhotoStorageServiceProtocol {
     private let fileManager = FileManager.default
     private let compressionQuality: CGFloat = 0.8
     let photosDirectory: URL
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.mindfulbites.app", category: "PhotoStorage")
 
     init(photosDirectory: URL? = nil) {
         if let dir = photosDirectory {
@@ -46,7 +48,7 @@ final class PhotoStorageService: PhotoStorageServiceProtocol {
             try data.write(to: fileURL)
             return filename
         } catch {
-            print("Failed to save photo: \(error)")
+            logger.error("Failed to save photo: \(error.localizedDescription)")
             return nil
         }
     }

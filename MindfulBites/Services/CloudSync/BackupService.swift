@@ -31,13 +31,16 @@ final class BackupService {
     private let manifestPath = ".mindfulBites"
 
     private let lastBackupDateKey = "lastBackupDate"
+    private let defaults: UserDefaults
 
     var lastBackupDate: Date? {
-        get { UserDefaults.standard.object(forKey: lastBackupDateKey) as? Date }
-        set { UserDefaults.standard.set(newValue, forKey: lastBackupDateKey) }
+        get { defaults.object(forKey: lastBackupDateKey) as? Date }
+        set { defaults.set(newValue, forKey: lastBackupDateKey) }
     }
 
-    init() {}
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
 
     // MARK: - Backup
 
@@ -49,6 +52,11 @@ final class BackupService {
 
         do {
             await MainActor.run { syncState = .syncing(progress: "Preparing backup...") }
+
+            // Compute filename before creating manifest
+            let createdAt = Date()
+            let formatter = ISO8601DateFormatter()
+            let backupFileName = "backup_\(formatter.string(from: createdAt)).json"
 
             // All SwiftData access + DTO mapping on MainActor (models require it)
             let (backupData, photoFileNames) = try await MainActor.run {
@@ -67,13 +75,14 @@ final class BackupService {
 
                 let manifest = BackupManifest(
                     version: BackupManifest.currentVersion,
-                    createdAt: Date(),
+                    createdAt: createdAt,
                     appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0",
                     deviceName: UIDevice.current.name,
                     foodEntryCount: foodEntries.count,
                     weightEntryCount: weightEntries.count,
                     tagCount: tags.count,
-                    photoFileNames: photoFileNames
+                    photoFileNames: photoFileNames,
+                    backupFileName: backupFileName
                 )
 
                 let backupData = BackupData(
@@ -127,11 +136,9 @@ final class BackupService {
 
             // Upload backup JSON
             await MainActor.run { syncState = .syncing(progress: "Uploading backup data...") }
-            let formatter = ISO8601DateFormatter()
-            let backupFileName = "backup_\(formatter.string(from: backupData.manifest.createdAt)).json"
             _ = try await provider.uploadFile(
                 data: jsonData,
-                fileName: backupFileName,
+                fileName: backupData.manifest.resolvedBackupFileName,
                 folderID: backupFolderID,
                 mimeType: "application/json"
             )
@@ -215,6 +222,13 @@ final class BackupService {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
             let backupData = try decoder.decode(BackupData.self, from: data)
+
+            // Version check
+            guard backupData.manifest.version <= BackupManifest.currentVersion else {
+                throw CloudStorageError.operationFailed(
+                    "This backup was created with a newer version of the app (v\(backupData.manifest.version)). Please update MindfulBites to restore it."
+                )
+            }
 
             // 2. Download all photos to a temp staging directory
             let stagingDir = FileManager.default.temporaryDirectory.appendingPathComponent("mindfulbites_restore_\(UUID().uuidString)")
