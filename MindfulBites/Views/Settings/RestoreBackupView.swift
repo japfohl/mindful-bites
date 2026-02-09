@@ -13,6 +13,8 @@ struct RestoreBackupView: View {
     @State private var selectedBackup: BackupManifest?
     @State private var showingConfirmation = false
     @State private var restoreError: String?
+    @State private var showingRestoreWarning = false
+    @State private var restoreWarningMessage = ""
 
     var body: some View {
         Group {
@@ -57,6 +59,13 @@ struct RestoreBackupView: View {
             Button("OK") {}
         } message: {
             Text(restoreError ?? "")
+        }
+        .alert("Restore Completed with Warnings", isPresented: $showingRestoreWarning) {
+            Button("OK") {
+                dismiss()
+            }
+        } message: {
+            Text(restoreWarningMessage)
         }
     }
 
@@ -105,12 +114,17 @@ struct RestoreBackupView: View {
         let fileName = "backup_\(formatter.string(from: manifest.createdAt)).json"
 
         do {
-            try await backupService.performRestore(
+            let result = try await backupService.performRestore(
                 modelContext: modelContext,
                 provider: provider,
                 backupFileName: fileName
             )
-            dismiss()
+            if result.hasWarnings {
+                restoreWarningMessage = result.warningMessage ?? ""
+                showingRestoreWarning = true
+            } else {
+                dismiss()
+            }
         } catch {
             restoreError = error.localizedDescription
         }

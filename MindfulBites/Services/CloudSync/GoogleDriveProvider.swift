@@ -3,11 +3,12 @@ import UIKit
 import GoogleSignIn
 import GoogleAPIClientForREST_Drive
 
+@MainActor
 final class GoogleDriveProvider: CloudStorageProvider {
     static let shared = GoogleDriveProvider()
 
-    let providerName = "Google Drive"
-    let providerIcon = "externaldrive.fill"
+    nonisolated let providerName = "Google Drive"
+    nonisolated let providerIcon = "externaldrive.fill"
 
     private(set) var authState: CloudAuthState = .signedOut
     private var driveService: GTLRDriveService?
@@ -146,24 +147,35 @@ final class GoogleDriveProvider: CloudStorageProvider {
             throw CloudStorageError.notAuthenticated
         }
 
-        let query = GTLRDriveQuery_FilesList.query()
-        query.q = "'\(folderID)' in parents and trashed = false"
-        query.fields = "files(id, name, mimeType, size, modifiedTime)"
-        query.pageSize = 100
+        var allFiles: [CloudFileMetadata] = []
+        var pageToken: String? = nil
 
-        let fileList: GTLRDrive_FileList = try await withCheckedThrowingContinuation { continuation in
-            service.executeQuery(query) { _, result, error in
-                if let error {
-                    continuation.resume(throwing: CloudStorageError.operationFailed(error.localizedDescription))
-                } else if let list = result as? GTLRDrive_FileList {
-                    continuation.resume(returning: list)
-                } else {
-                    continuation.resume(throwing: CloudStorageError.operationFailed("Unexpected response"))
+        repeat {
+            let query = GTLRDriveQuery_FilesList.query()
+            query.q = "'\(folderID)' in parents and trashed = false"
+            query.fields = "nextPageToken, files(id, name, mimeType, size, modifiedTime)"
+            query.pageSize = 100
+            if let token = pageToken {
+                query.pageToken = token
+            }
+
+            let fileList: GTLRDrive_FileList = try await withCheckedThrowingContinuation { continuation in
+                service.executeQuery(query) { _, result, error in
+                    if let error {
+                        continuation.resume(throwing: CloudStorageError.operationFailed(error.localizedDescription))
+                    } else if let list = result as? GTLRDrive_FileList {
+                        continuation.resume(returning: list)
+                    } else {
+                        continuation.resume(throwing: CloudStorageError.operationFailed("Unexpected response"))
+                    }
                 }
             }
-        }
 
-        return (fileList.files ?? []).map { $0.toCloudFileMetadata() }
+            allFiles.append(contentsOf: (fileList.files ?? []).map { $0.toCloudFileMetadata() })
+            pageToken = fileList.nextPageToken
+        } while pageToken != nil
+
+        return allFiles
     }
 
     func deleteFile(fileID: String) async throws {

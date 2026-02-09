@@ -7,7 +7,7 @@ protocol NotificationServiceProtocol {
     @MainActor func requestPermission() async -> Bool
     func scheduleWeightReminder(hour: Int, minute: Int) async
     func cancelWeightReminder()
-    func syncWithSettings() async
+    func syncWithSettings(settings: SettingsServiceProtocol) async
 }
 
 @Observable
@@ -77,9 +77,7 @@ final class NotificationService: NotificationServiceProtocol {
 
     // MARK: - Sync with Settings
 
-    func syncWithSettings() async {
-        let settings = SettingsService.shared
-
+    func syncWithSettings(settings: SettingsServiceProtocol = SettingsService.shared) async {
         if settings.weightReminderEnabled {
             await scheduleWeightReminder(hour: settings.weightReminderHour, minute: settings.weightReminderMinute)
         } else {

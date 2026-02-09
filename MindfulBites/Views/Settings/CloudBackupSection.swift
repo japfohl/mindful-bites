@@ -9,6 +9,8 @@ struct CloudBackupSection: View {
     @State private var signInErrorMessage = ""
     @State private var showingBackupError = false
     @State private var backupErrorMessage = ""
+    @State private var showingBackupWarning = false
+    @State private var backupWarningMessage = ""
 
     var body: some View {
         Section {
@@ -25,6 +27,21 @@ struct CloudBackupSection: View {
             } else {
                 Text("Back up your data to keep it safe across devices")
             }
+        }
+        .alert("Sign In Failed", isPresented: $showingSignInError) {
+            Button("OK") {}
+        } message: {
+            Text(signInErrorMessage)
+        }
+        .alert("Backup Failed", isPresented: $showingBackupError) {
+            Button("OK") {}
+        } message: {
+            Text(backupErrorMessage)
+        }
+        .alert("Backup Completed with Warnings", isPresented: $showingBackupWarning) {
+            Button("OK") {}
+        } message: {
+            Text(backupWarningMessage)
         }
     }
 
@@ -115,10 +132,14 @@ struct CloudBackupSection: View {
     @MainActor
     private func performBackup(provider: any CloudStorageProvider) async {
         do {
-            try await backupService.performBackup(
+            let result = try await backupService.performBackup(
                 modelContext: modelContext,
                 provider: provider
             )
+            if result.hasWarnings {
+                backupWarningMessage = result.warningMessage ?? ""
+                showingBackupWarning = true
+            }
         } catch {
             backupErrorMessage = error.localizedDescription
             showingBackupError = true

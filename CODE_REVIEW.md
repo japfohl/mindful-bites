@@ -6,63 +6,41 @@
 
 ---
 
-## Critical (Blockers)
+## ~~Critical (Blockers)~~ — All Fixed
 
-### 1. Restore is destructive with no safety net
-**File:** `BackupService.swift:182-195`
+### ~~1. Restore is destructive with no safety net~~ FIXED
+Implemented staged restore: downloads to temp directory first, then swaps atomically. Returns `RestoreResult` with failed photo download warnings.
 
-`performRestore` deletes ALL local data (food entries, weight entries, tags, photos) before downloading the replacement. If the network fails mid-restore, or photo downloads silently error out (`try?` on line 244), the user loses everything with no recovery path.
+### ~~2. syncState never resets on error~~ FIXED
+Added do/catch with `syncState = .idle` reset in all error paths for both `performBackup` and `performRestore`.
 
-**Fix:** Either create a local backup before restoring, or download everything into a staging area first and swap atomically.
+### ~~3. Error alerts defined but never displayed~~ FIXED
+Added `.alert()` modifiers to `CloudBackupSection` for sign-in errors, backup errors, and backup warnings. Added restore warning alert to `RestoreBackupView`.
 
-### 2. syncState never resets on error
-**File:** `BackupService.swift:27-131, 162-255`
+### ~~4. Photo upload failures silently skipped during backup~~ FIXED
+Replaced `try?` with do/catch, tracks failed uploads in `BackupResult.skippedPhotos`, surfaces warning to user.
 
-Both `performBackup` and `performRestore` set `syncState = .syncing(...)` but never reset it if an error is thrown. The UI will show a perpetual spinner with no way to recover. Neither method has a `defer { syncState = .idle }` or catch-path reset.
-
-### 3. Error alerts defined but never displayed
-**File:** `CloudBackupSection.swift:8-11`
-
-Four `@State` properties (`showingSignInError`, `signInErrorMessage`, `showingBackupError`, `backupErrorMessage`) are populated on errors, but there are no `.alert()` modifiers in the view body. Sign-in and backup errors are silently swallowed from the user's perspective.
-
-### 4. Photo upload failures silently skipped during backup
-**File:** `BackupService.swift:89-97`
-
-`try? Data(contentsOf:)` silently skips missing or corrupted photos. The backup completes "successfully" with missing photos and no user indication. The manifest's `photoFileNames` lists photos that may not exist in the cloud.
-
-### 5. Google Drive pagination missing
-**File:** `GoogleDriveProvider.swift:152`
-
-`query.pageSize = 100` with no pagination loop. Users with >100 photos or >100 backup files will silently have data truncated. `listFiles` returns only the first page.
+### ~~5. Google Drive pagination missing~~ FIXED
+Added pagination loop using `nextPageToken` in `listFiles` to fetch all pages.
 
 ---
 
-## High (Fix Before Shipping)
+## ~~High (Fix Before Shipping)~~ — All Fixed
 
-### 6. GoogleDriveProvider has data races
-**File:** `GoogleDriveProvider.swift`
+### ~~6. GoogleDriveProvider has data races~~ FIXED
+Added `@MainActor` to class declaration. Marked constant properties as `nonisolated`.
 
-Mutable state (`authState`, `driveService`, `folderIDCache`) is accessed from async contexts with no synchronization. `folderIDCache` is read and written in `ensureFolder` (lines 71-92). `authState` is written from `signIn`/`signOut`/`restorePreviousSignIn` without actor isolation. This class should be an `actor` or use a lock.
+### ~~7. @MainActor on entire backup/restore methods~~ FIXED
+Removed `@MainActor` from method signatures. Only SwiftData access and UI state updates wrapped in `await MainActor.run {}`.
 
-### 7. @MainActor on entire backup/restore methods
-**File:** `BackupService.swift:26-27, 161-162`
+### ~~8. Dual source of truth for weightUnit~~ FIXED
+Replaced `@AppStorage("weightUnit")` with `SettingsService.shared` reference in `InsightsView`.
 
-Both `performBackup` and `performRestore` are `@MainActor`, meaning all network uploads, JSON encoding, and file I/O run on the main thread. Only the SwiftData fetches require main actor isolation. Heavy backups with many photos will freeze the UI.
+### ~~9. NotificationService.syncWithSettings() hardcodes singleton~~ FIXED
+Made `settings` parameter injectable with default value `SettingsService.shared`. Updated protocol.
 
-### 8. Dual source of truth for weightUnit
-**File:** `InsightsView.swift:7`
-
-`@AppStorage("weightUnit")` reads directly from UserDefaults using a raw string key, bypassing `SettingsService`. If the key name ever changes in `SettingsService.Keys.weightUnit`, this silently breaks. Two independent readers of the same UserDefaults key with no shared constant.
-
-### 9. NotificationService.syncWithSettings() hardcodes singleton
-**File:** `NotificationService.swift:81`
-
-`let settings = SettingsService.shared` is the only service method that bypasses the DI pattern used everywhere else. Makes it impossible to test notification scheduling with different settings.
-
-### 10. MealTimeRange doesn't support overnight ranges
-**File:** `MealTimeRange.swift:38-40`
-
-`contains(timeInMinutes:)` checks `start <= time < end`, which only works when `start < end`. A dinner range of 22:00-01:00 (crossing midnight) would never match. The UI has no validation to prevent users from creating this configuration via the DatePickers.
+### ~~10. MealTimeRange doesn't support overnight ranges~~ FIXED
+Added overnight logic: when `startMinutes > endMinutes`, uses OR (`>=start || <end`) instead of AND.
 
 ---
 

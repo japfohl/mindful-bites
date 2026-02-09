@@ -23,6 +23,7 @@ final class MockCloudStorageProvider: CloudStorageProvider {
     // Error injection
     var shouldFailUpload = false
     var shouldFailDownload = false
+    var downloadFailureFileIDs: Set<String> = []
 
     func signIn(presentingViewController: UIViewController) async throws {
         signInCallCount += 1
@@ -79,6 +80,10 @@ final class MockCloudStorageProvider: CloudStorageProvider {
 
         if shouldFailDownload {
             throw CloudStorageError.downloadFailed("Mock download failure")
+        }
+
+        if downloadFailureFileIDs.contains(fileID) {
+            throw CloudStorageError.downloadFailed("Mock selective download failure for \(fileID)")
         }
 
         guard let file = files[fileID] else {

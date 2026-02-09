@@ -4,7 +4,7 @@ import SwiftData
 struct InsightsView: View {
     @Query private var foodEntries: [FoodEntry]
     @Query(sort: \WeightEntry.date, order: .reverse) private var weightEntries: [WeightEntry]
-    @AppStorage("weightUnit") private var weightUnit: WeightUnit = .lbs
+    @State private var settings = SettingsService.shared
 
     var body: some View {
         NavigationStack {
@@ -62,7 +62,7 @@ struct InsightsView: View {
     private var weightTrendSection: some View {
         let result = InsightsCalculator.weightTrend(
             entries: weightEntries.map { (date: $0.date, weightKg: $0.weight) },
-            unit: weightUnit
+            unit: settings.weightUnit
         )
         return VStack(alignment: .leading, spacing: 12) {
             Text("Weight Trend")
@@ -72,7 +72,7 @@ struct InsightsView: View {
             TrendCard(
                 trend: result.trend,
                 changeAmount: result.changeAmount,
-                unit: weightUnit
+                unit: settings.weightUnit
             )
         }
     }

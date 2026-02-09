@@ -36,7 +36,13 @@ struct MealTimeRange: Codable, Equatable {
     }
 
     func contains(timeInMinutes: Int) -> Bool {
-        timeInMinutes >= startMinutes && timeInMinutes < endMinutes
+        if startMinutes <= endMinutes {
+            // Normal range (e.g., 6:00 - 8:00)
+            return timeInMinutes >= startMinutes && timeInMinutes < endMinutes
+        } else {
+            // Overnight range crossing midnight (e.g., 22:00 - 1:00)
+            return timeInMinutes >= startMinutes || timeInMinutes < endMinutes
+        }
     }
 }
 

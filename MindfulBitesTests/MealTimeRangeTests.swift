@@ -64,4 +64,27 @@ final class MealTimeRangeTests: XCTestCase {
         XCTAssertEqual(a, b)
         XCTAssertNotEqual(a, c)
     }
+
+    func testContainsOvernightRange() {
+        // Dinner from 22:00 to 01:00
+        let range = MealTimeRange(startHour: 22, startMinute: 0, endHour: 1, endMinute: 0)
+        XCTAssertTrue(range.contains(timeInMinutes: 1320))  // 22:00
+        XCTAssertTrue(range.contains(timeInMinutes: 1380))  // 23:00
+        XCTAssertTrue(range.contains(timeInMinutes: 0))     // 00:00 (midnight)
+        XCTAssertTrue(range.contains(timeInMinutes: 30))    // 00:30
+        XCTAssertFalse(range.contains(timeInMinutes: 60))   // 01:00 (exclusive end)
+        XCTAssertFalse(range.contains(timeInMinutes: 720))  // 12:00 (midday)
+        XCTAssertFalse(range.contains(timeInMinutes: 1319)) // 21:59
+    }
+
+    func testContainsOvernightRangeBoundary() {
+        // 23:30 to 00:30
+        let range = MealTimeRange(startHour: 23, startMinute: 30, endHour: 0, endMinute: 30)
+        XCTAssertTrue(range.contains(timeInMinutes: 1410))  // 23:30 (start)
+        XCTAssertTrue(range.contains(timeInMinutes: 1439))  // 23:59
+        XCTAssertTrue(range.contains(timeInMinutes: 0))     // 00:00
+        XCTAssertTrue(range.contains(timeInMinutes: 29))    // 00:29
+        XCTAssertFalse(range.contains(timeInMinutes: 30))   // 00:30 (exclusive end)
+        XCTAssertFalse(range.contains(timeInMinutes: 1409)) // 23:29
+    }
 }
